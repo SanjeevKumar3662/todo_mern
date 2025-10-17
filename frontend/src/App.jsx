@@ -7,44 +7,28 @@ function App() {
     <>
       <div className="container">
         <h1>This Is A MERN Todo List</h1>
+
         <form action="" method="get">
           <div className="input-field">
-            <label htmlFor="name">Enter your Name : </label>
-            <input type="text" id="name" name="name" placeholder="Enter Name" />
-          </div>
-
-          <div className="input-field">
-            <label htmlFor="age">Enter Age : </label>
-            <input
-              type="number"
-              name="age"
-              id="age"
-              min="0"
-              max="200"
-              defaultValue={0}
-              placeholder="Enter Age"
-            />
-          </div>
-
-          <div className="input-field">
-            <label htmlFor="location">Enter Location : </label>
+            <label htmlFor="name">Title : </label>
             <input
               type="text"
-              name="location"
-              id="location"
-              defaultValue={"New Delhi"}
-              placeholder="Enter Location"
+              id="name"
+              name="name"
+              placeholder="Enter Subject Title"
             />
           </div>
+
           <div className="input-field">
-            <label htmlFor="email">Enter Email : </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter  Email"
-              defaultValue={"test@example.com"}
-            />
+            <label htmlFor="discription">Enter Discription : </label>
+            <textarea
+              name="discription"
+              id=""
+              cols="30"
+              rows="2"
+              placeholder="You can write anything here"
+              maxLength={2000}
+            ></textarea>
           </div>
           <button type="submit">Submit</button>
         </form>
