@@ -8,7 +8,7 @@ function App() {
     <>
       <div className="container">
         <div className="main">
-          <h1>This Is A MERN Todo List</h1>
+          <h1>This is a "MERN" Todo List</h1>
           <Form />
           <Todos />
         </div>
