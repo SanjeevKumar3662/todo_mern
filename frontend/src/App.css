@@ -58,12 +58,18 @@ form {
     border-radius: 10px;
     padding: 10px;
   }
+}
 
-  button {
-    padding: 1rem;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 10px;
-    background: rgb(71, 92, 187);
-  }
+button {
+  padding: 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: rgb(71, 92, 187);
+}
+button:hover {
+  box-shadow: -1px 1px 10px white;
+}
+button:active {
+  box-shadow: -1px 1px 10px rgb(21, 2, 2);
 }
