@@ -32,6 +32,7 @@ app.post("/todos", async (req, res) => {
   }
 });
 
+//get all todos
 app.get("/todos", async (req, res) => {
   try {
     const todos = await Todo.find({});
@@ -39,6 +40,25 @@ app.get("/todos", async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
+  }
+});
+
+//delete an item
+app.delete("/todos/:id", async (req, res) => {
+  try {
+    const deletedTodo = await Todo.deleteOne({ _id: req.params.id });
+    // console.log(req.params.id);
+
+    if (deletedTodo.deletedCount === 1) {
+      console.log("todo deleted");
+      res.sendStatus(200);
+    } else {
+      res.status(404).json({ message: "Todo not found" });
+      console.log("404 can't find todo");
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    console.log(err.message);
   }
 });
 
