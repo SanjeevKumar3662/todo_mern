@@ -1,10 +1,18 @@
 .todo {
   display: flex;
+  justify-content: space-between;
   width: 100%;
   border: 1px solid;
   border-radius: 1rem;
   padding: 1rem;
   background: brown;
-
   font-size: 1.2rem;
+
+  button {
+    margin: auto 5px;
+  }
+  .delete {
+    background: rgb(255, 123, 0);
+    padding: 0.8rem;
+  }
 }
