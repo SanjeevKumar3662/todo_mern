@@ -7,8 +7,10 @@ function App() {
   return (
     <>
       <div className="container">
-        <h1>This Is A MERN Todo List</h1>
-        <Form />
+        <div className="main">
+          <h1>This Is A MERN Todo List</h1>
+          <Form />
+        </div>
       </div>
     </>
   );
