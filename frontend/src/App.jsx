@@ -1,6 +1,6 @@
-import Form from "./components/form";
 import "./App.css";
-
+import Form from "./components/Form";
+import Todos from "./components/Todos";
 function App() {
   // const [count, setCount] = useState(0)
 
@@ -10,6 +10,7 @@ function App() {
         <div className="main">
           <h1>This Is A MERN Todo List</h1>
           <Form />
+          <Todos />
         </div>
       </div>
     </>
