@@ -1,11 +1,16 @@
 .todo {
-  display: flex;
-  justify-content: space-between;
   width: 100%;
   border: 1px solid;
-  border-radius: 1rem;
-  padding: 1rem;
   background: brown;
+  border-radius: 10px;
+  padding: 5px;
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
   font-size: 1.2rem;
 
   button {
@@ -15,4 +20,11 @@
     background: rgb(255, 123, 0);
     padding: 0.8rem;
   }
+}
+.description {
+  /* border: 1px solid; */
+  border-radius: 10px;
+  width: 100%;
+  padding: 1rem;
+  background: rgb(18, 58, 69);
 }
