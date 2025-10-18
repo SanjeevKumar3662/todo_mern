@@ -27,6 +27,7 @@ const Todos = () => {
           return (
             <Todo
               key={obj._id}
+              id={obj._id}
               title={obj.title}
               description={obj.description}
             />
