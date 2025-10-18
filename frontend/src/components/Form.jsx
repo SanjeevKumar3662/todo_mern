@@ -5,8 +5,8 @@ const Form = () => {
   const [description, setDescription] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  const onSubmitForm = async (e) => {
-    e.preventDefault();
+  const onSubmitForm = async () => {
+    // e.preventDefault();
     try {
       const response = await fetch("http://localhost:3000/todos", {
         method: "POST",
