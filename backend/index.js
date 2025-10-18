@@ -26,9 +26,19 @@ app.post("/todos", async (req, res) => {
   try {
     await Todo.create({ title, description });
     res.status(200).json({ message: "Created Successfully" });
-    // console.log(title, "created");
+    console.log(title, "created");
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+app.get("/todos", async (req, res) => {
+  try {
+    const todos = await Todo.find({});
+    res.send(todos);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
