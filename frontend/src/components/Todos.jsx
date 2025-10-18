@@ -15,6 +15,28 @@ const Todos = () => {
     getTodos();
   }, []);
 
+  const onClickDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/todos/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // console.log(id);
+      if (response.ok) {
+        //   setShowPopup(true); // show popup
+        console.log("item deleted");
+
+        //this will filter and remove the deleted todo for client side
+        setTodos(() => todos.filter((todo) => todo._id != id));
+        //   // hide popup after 2 seconds
+        //   setTimeout(() => setShowPopup(false), 2000);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   todos && console.log(todos);
   return (
     <>
@@ -30,6 +52,7 @@ const Todos = () => {
               id={obj._id}
               title={obj.title}
               description={obj.description}
+              onClickDelete={onClickDelete}
             />
           );
         })}
