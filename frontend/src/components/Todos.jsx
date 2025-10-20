@@ -19,7 +19,7 @@ const Todos = () => {
 
   const onClickDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/todos/${id}`, {
+      const response = await fetch(`${API_URI}/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
