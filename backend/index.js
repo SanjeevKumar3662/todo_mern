@@ -1,13 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
-import { configDotenv } from "dotenv";
+import "dotenv/config";
 import cors from "cors";
 
 const app = express();
 app.use(cors());
 
 const PORT = 3000;
-const DB_URI = configDotenv().parsed.DB_URI;
+const DB_URI = process.env.DB_URI;
 
 //importing todo model
 import Todo from "./models/todo.model.js";
@@ -62,18 +62,21 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
+app.listen(PORT, () => {
+  console.log("Sever Started !");
+  // console.log(DB_URI);
+});
+
 //db connection
 const connectDb = async () => {
   try {
     await mongoose.connect(DB_URI);
     console.log("connected to DB!");
-    app.listen(PORT, () => {
-      console.log("Sever Started !");
-      // console.log(DB_URI);
-    });
   } catch (error) {
     console.log(error.message);
   }
 };
 
 connectDb();
+
+export default app;
