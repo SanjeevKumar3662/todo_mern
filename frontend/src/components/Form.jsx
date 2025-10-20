@@ -5,10 +5,13 @@ const Form = () => {
   const [description, setDescription] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
+  const API_URI = import.meta.env.VITE_API_URI;
+  // console.log(API_URI);
+
   const onSubmitForm = async () => {
     // e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/todos", {
+      const response = await fetch(`${API_URI}/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),

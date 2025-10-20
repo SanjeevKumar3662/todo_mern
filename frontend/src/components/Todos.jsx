@@ -5,10 +5,12 @@ import { useState } from "react";
 const Todos = () => {
   const [todos, setTodos] = useState([]);
 
+  const API_URI = import.meta.env.VITE_API_URI;
+
   useEffect(() => {
     const getTodos = async () => {
-      const res = await fetch("http://localhost:3000/todos");
-      // http://localhost:3000/
+      const res = await fetch(`${API_URI}/todos`);
+
       const data = await res.json();
       setTodos(data);
     };
