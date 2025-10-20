@@ -10,11 +10,11 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 1rem;
+  padding: 0.5rem;
   font-size: 1.2rem;
 
   button {
-    margin: auto 5px;
+    margin: auto 2px;
   }
   .delete {
     background: rgb(255, 123, 0);
