@@ -28,3 +28,11 @@
   padding: 1rem;
   background: rgb(18, 58, 69);
 }
+
+
+/* pre text */
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
