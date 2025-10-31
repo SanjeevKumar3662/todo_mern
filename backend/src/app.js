@@ -7,7 +7,7 @@ app.use(cors());
 
 import userRouter from "./routes/todo.routes.js";
 
-express.urlencoded({ extended: true });
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //test endpoint
