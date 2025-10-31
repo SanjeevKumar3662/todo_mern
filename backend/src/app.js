@@ -1,14 +1,16 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
+import userRouter from "./routes/todo.routes.js";
+import connectDb from "./db/db.js";
 
 const app = express();
 app.use(cors());
-
-import userRouter from "./routes/todo.routes.js";
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Connect DB
+await connectDb();
 
 //test endpoint
 app.get("/", (req, res) => {
