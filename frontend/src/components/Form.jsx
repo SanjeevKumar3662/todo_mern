@@ -11,7 +11,7 @@ const Form = () => {
   const onSubmitForm = async () => {
     // e.preventDefault();
     try {
-      const response = await fetch(`${API_URI}/todos`, {
+      const response = await fetch(`${API_URI}/todos/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),

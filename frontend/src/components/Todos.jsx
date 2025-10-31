@@ -9,17 +9,17 @@ const Todos = () => {
 
   useEffect(() => {
     const getTodos = async () => {
-      const res = await fetch(`${API_URI}/todos`);
+      const res = await fetch(`${API_URI}/todos/all-todos`);
 
       const data = await res.json();
       setTodos(data);
     };
     getTodos();
-  }, []);
+  }, [API_URI]);
 
   const onClickDelete = async (id) => {
     try {
-      const response = await fetch(`${API_URI}/todos/${id}`, {
+      const response = await fetch(`${API_URI}/todos/delete/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
