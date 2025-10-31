@@ -62,16 +62,15 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log("Sever Started !");
-  // console.log(DB_URI);
-});
-
 //db connection
 const connectDb = async () => {
   try {
     await mongoose.connect(DB_URI);
     console.log("connected to DB!");
+    app.listen(PORT, () => {
+      console.log("Sever Started !");
+      // console.log(DB_URI);
+    });
   } catch (error) {
     console.log(error.message);
   }
