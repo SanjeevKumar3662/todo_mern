@@ -30,5 +30,3 @@ if (process.env.MODE === "DEV") {
   // For Vercel, just connect once
   await connectDb();
 }
-
-export default app;
