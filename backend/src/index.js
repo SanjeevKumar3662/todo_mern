@@ -10,7 +10,7 @@ const PORT = 3000;
 const DB_URI = process.env.DB_URI;
 
 //importing todo model
-import Todo from "./models/todo.model.js";
+import Todo from "../models/todo.model.js";
 
 express.urlencoded({ extended: true });
 app.use(express.json());
