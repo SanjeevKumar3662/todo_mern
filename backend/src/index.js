@@ -1,25 +1,34 @@
 import mongoose from "mongoose";
+import app from "./app.js";
+import { DB_NAME } from "./constants.js";
 
 const PORT = 3000;
 const DB_URI = process.env.DB_URI;
-import { DB_NAME } from "./constants.js";
 
-import app from "./app.js";
+// Prevent multiple DB connections on Vercel
+let isConnected = false;
 
-//db connection
 const connectDb = async () => {
+  if (isConnected) return;
   try {
-    await mongoose.connect(`${DB_URI}/${DB_NAME}`);
-    console.log("connected to DB!");
-    app.listen(PORT, () => {
-      console.log("Sever Started !");
-      // console.log(DB_URI);
-    });
+    const db = await mongoose.connect(`${DB_URI}/${DB_NAME}`);
+    isConnected = db.connections[0].readyState === 1;
+    console.log("✅ MongoDB connected!");
   } catch (error) {
-    console.log(error.message);
+    console.error("MongoDB connection error:", error.message);
   }
 };
 
-connectDb();
+// Only start a listener locally
+if (process.env.MODE === "DEV") {
+  connectDb().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running locally on port ${PORT}`);
+    });
+  });
+} else {
+  // For Vercel, just connect once
+  await connectDb();
+}
 
 export default app;
