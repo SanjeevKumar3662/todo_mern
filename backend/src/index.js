@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import app from "./app.js";
-import { DB_NAME } from "./constants.js";
+// import { DB_NAME } from "./constants.js";
 
 const PORT = 3000;
 const DB_URI = process.env.DB_URI;
@@ -11,7 +11,7 @@ let isConnected = false;
 const connectDb = async () => {
   if (isConnected) return;
   try {
-    const db = await mongoose.connect(`${DB_URI}/${DB_NAME}`);
+    const db = await mongoose.connect(`${DB_URI}`);
     isConnected = db.connections[0].readyState === 1;
     console.log("✅ MongoDB connected!");
   } catch (error) {
