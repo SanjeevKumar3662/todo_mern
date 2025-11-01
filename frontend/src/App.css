@@ -79,6 +79,10 @@ button:active {
   box-shadow: -1px 1px 10px rgb(21, 2, 2);
 }
 
+.popup {
+  background-color: rgb(226, 52, 43);
+}
+
 @media (max-width: 620px) {
   form,
   .main {
@@ -89,4 +93,3 @@ button:active {
     width: 95%;
   }
 }
-

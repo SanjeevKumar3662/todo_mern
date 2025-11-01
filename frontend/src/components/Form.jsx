@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Form = () => {
+const Form = ({ todos, setTodos }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -8,8 +8,8 @@ const Form = () => {
   const API_URI = import.meta.env.VITE_API_URI;
   // console.log(API_URI);
 
-  const onSubmitForm = async () => {
-    // e.preventDefault();
+  const onSubmitForm = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch(`${API_URI}/todos/create`, {
         method: "POST",
@@ -19,10 +19,15 @@ const Form = () => {
 
       if (response.ok) {
         setShowPopup(true); // show popup
+        const data = await response.json();
+        console.log(data);
+
+        setTodos(() => [...todos, data.result]);
+
         setTitle(""); // clear form
         setDescription("");
         // hide popup after 2 seconds
-        setTimeout(() => setShowPopup(false), 2000);
+        setTimeout(() => setShowPopup(false), 4000);
       }
     } catch (err) {
       console.log(err);
@@ -68,7 +73,7 @@ const Form = () => {
       </form>
       {/* Popup */}
       {showPopup && (
-        <div>
+        <div className="popup">
           <h1>Todo created successfully!</h1>
         </div>
       )}

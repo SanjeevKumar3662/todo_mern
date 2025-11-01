@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import Todo from "./todo/Todo";
-import { useState } from "react";
 
-const Todos = () => {
-  const [todos, setTodos] = useState([]);
-
+const Todos = ({ todos, setTodos }) => {
   const API_URI = import.meta.env.VITE_API_URI;
 
   useEffect(() => {
@@ -15,7 +12,7 @@ const Todos = () => {
       setTodos(data);
     };
     getTodos();
-  }, [API_URI]);
+  }, [API_URI, setTodos]);
 
   const onClickDelete = async (id) => {
     try {
