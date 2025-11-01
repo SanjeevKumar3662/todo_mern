@@ -1,6 +1,21 @@
 import bcrypt from "bcrypt";
 import { saltRounds } from "../constants.js";
 import { User } from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+
+const generateAccessToken = (res, username) => {
+  try {
+    const accessToken = jwt.sign({ username }, process.env.API_ACCESS_KEY);
+
+    if (!accessToken) {
+      throw new error();
+    }
+
+    return accessToken;
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
 
 export const registerUser = async (req, res) => {
   // destructure username and password
@@ -37,6 +52,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
+    //find user in db - this will return user without password field, select : true
     const user = await User.findById(_id);
     // console.log(user);
 
@@ -71,7 +87,11 @@ export const loginUser = async (req, res) => {
     }
 
     // console.log(user, isPasswordVerified);
-    return res.status(200).json("loginIn successfull");
+    const accessToken = await generateAccessToken(res, username);
+
+    return res
+      .status(200)
+      .json({ message: "loginIn successfull", accessToken });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
