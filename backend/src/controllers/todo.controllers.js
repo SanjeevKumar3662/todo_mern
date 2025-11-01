@@ -14,8 +14,9 @@ export const createTodo = async (req, res) => {
   try {
     console.log("body -> ", req.body);
     const { title, description } = req.body;
-    await Todo.create({ title, description });
-    res.status(200).json({ message: "Created Successfully" });
+    const todo = await Todo.create({ title, description });
+    // console.log(todo);
+    res.status(200).json({ message: "Created Successfully", result: todo });
     console.log(title, "created");
   } catch (error) {
     res.status(500).json({ message: error.message });
