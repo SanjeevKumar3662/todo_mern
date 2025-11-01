@@ -3,9 +3,9 @@ import { saltRounds } from "../constants.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-const generateAccessToken = (res, username) => {
+const generateAccessToken = (res, jwtPlayload) => {
   try {
-    const accessToken = jwt.sign({ username }, process.env.API_ACCESS_KEY);
+    const accessToken = jwt.sign(jwtPlayload, process.env.API_ACCESS_KEY);
 
     if (!accessToken) {
       throw new error();
@@ -87,7 +87,8 @@ export const loginUser = async (req, res) => {
     }
 
     // console.log(user, isPasswordVerified);
-    const accessToken = await generateAccessToken(res, username);
+    const jwtPlayload = { username, mongo_id: user._id };
+    const accessToken = await generateAccessToken(res, jwtPlayload);
 
     return res
       .status(200)
