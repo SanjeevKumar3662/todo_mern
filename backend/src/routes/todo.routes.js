@@ -3,7 +3,7 @@ import {
   getAlltodos,
   createTodo,
   deleteTodo,
-} from "../controllers/todo.controllers.js";
+} from "../controllers/todo.controller.js";
 
 const router = Router();
 
