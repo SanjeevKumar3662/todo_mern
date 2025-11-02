@@ -3,17 +3,12 @@ import { saltRounds } from "../constants.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-const generateAccessToken = (res, jwtPlayload) => {
+const generateAccessToken = (jwtPlayload) => {
   try {
-    const accessToken = jwt.sign(jwtPlayload, process.env.API_ACCESS_KEY);
-
-    if (!accessToken) {
-      throw new error();
-    }
-
-    return accessToken;
+    return jwt.sign(jwtPlayload, process.env.API_ACCESS_KEY);
   } catch (error) {
-    return res.status(500).json(error.message);
+    console.error("JWT signing failed:", error);
+    throw error;
   }
 };
 
@@ -30,7 +25,7 @@ export const registerUser = async (req, res) => {
 
     //checking if all fields are provided
     if (!(username && email && fullname && password)) {
-      res.status(400).json({
+      return res.status(400).json({
         message:
           "All fields incluing username, email, fullname, password are required",
       });
@@ -38,7 +33,7 @@ export const registerUser = async (req, res) => {
 
     //validate password length
     if (password.length < 8 || password.length > 20) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Password length must be between 8 to 20 characters",
       });
     }
@@ -56,7 +51,8 @@ export const registerUser = async (req, res) => {
     const user = await User.findById(_id);
     // console.log(user);
 
-    res.status(200).json({
+    res.status(201).json({
+      // 201 code for created
       user,
     });
   } catch (error) {
@@ -88,7 +84,7 @@ export const loginUser = async (req, res) => {
 
     // console.log(user, isPasswordVerified);
     const jwtPlayload = { username, mongo_id: user._id };
-    const accessToken = await generateAccessToken(res, jwtPlayload);
+    const accessToken = generateAccessToken(jwtPlayload); // no await, no res
 
     return res
       .status(200)
