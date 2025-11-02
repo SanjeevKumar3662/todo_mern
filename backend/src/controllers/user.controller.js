@@ -109,7 +109,7 @@ export const loginUser = async (req, res) => {
         httpOnly: true, // Prevents JavaScript access (more secure)
         secure: true, // Ensures cookies are sent over HTTPS only
         sameSite: "strict", // Prevents CSRF attacks
-        maxAge: 40 * 1000, // Cookie expiration (15 minutes) for now 40s
+        maxAge: 15 * 60 * 1000, // Cookie expiration (15 minutes) for now 40s
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true, // Prevents JavaScript access (more secure)
@@ -164,7 +164,7 @@ export const refreshAccessToken = async (req, res) => {
             httpOnly: true, // Prevents JavaScript access (more secure)
             secure: true, // Ensures cookies are sent over HTTPS only
             sameSite: "strict", // Prevents CSRF attacks
-            maxAge: 40 * 1000, // Cookie expiration (15 minutes)
+            maxAge: 15 * 60 * 1000, // Cookie expiration (15 minutes)
           })
           .status(200)
           .json({ message: "Access token refreshed successfully" });
