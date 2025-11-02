@@ -25,6 +25,57 @@ const generateRefreshToken = (jwtPayload) => {
   }
 };
 
+export const refreshAccessToken = async (req, res) => {
+  try {
+    // Get refresh token from cookies
+    const refreshTokenFromClient = req.cookies.refreshToken;
+    if (!refreshTokenFromClient) {
+      return res.status(401).json({ message: "Refresh token not found" });
+    }
+
+    // Check if the refresh token exists in the database
+    const user = await User.findOne({ refreshToken: refreshTokenFromClient });
+    if (!user) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    //verify refresh token
+    jwt.verify(
+      refreshTokenFromClient,
+      process.env.API_REFRESH_KEY,
+      (err, decoded) => {
+        if (err) {
+          return res.status(403).json({ message: "Invalid or expired token" });
+        }
+
+        // Check if the decoded user ID matches the database user ID
+        if (user._id.toString() !== decoded._id) {
+          return res.status(403).json({ message: "Invalid or expired token" });
+        }
+
+        // Generate a new access token
+        const newAccessToken = generateAccessToken({
+          username: decoded.username,
+          _id: decoded._id,
+        });
+
+        // Send the new access token as a cookie
+        return res
+          .cookie("accessToken", newAccessToken, {
+            httpOnly: true, // Prevents JavaScript access (more secure)
+            secure: true, // Ensures cookies are sent over HTTPS only
+            sameSite: "strict", // Prevents CSRF attacks
+            maxAge: 15 * 60 * 1000, // Cookie expiration (15 minutes)
+          })
+          .status(200)
+          .json({ message: "Access token refreshed successfully" });
+      }
+    );
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 export const registerUser = async (req, res) => {
   // destructure username and password
   // encrypt it using bcrypt
@@ -124,53 +175,44 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const refreshAccessToken = async (req, res) => {
+export const logoutUser = async (req, res) => {
   try {
-    // Get refresh token from cookies
-    const refreshTokenFromClient = req.cookies.refreshToken;
-    if (!refreshTokenFromClient) {
-      return res.status(401).json({ message: "Refresh token not found" });
+    // Ensure req.user is populated
+    if (!req.user) {
+      return res.status(401).json({
+        message: "User not authenticated. Unable to log out.",
+      });
     }
 
-    // Check if the refresh token exists in the database
-    const user = await User.findOne({ refreshToken: refreshTokenFromClient });
+    // Find the user in the database
+    const user = await User.findById(req.user._id);
     if (!user) {
-      return res.status(403).json({ message: "Invalid refresh token" });
+      return res.status(404).json({
+        message: "User not found. Unable to log out.",
+      });
     }
 
-    //verify refresh token
-    jwt.verify(
-      refreshTokenFromClient,
-      process.env.API_REFRESH_KEY,
-      (err, decoded) => {
-        if (err) {
-          return res.status(403).json({ message: "Invalid or expired token" });
-        }
+    // Clear the refresh token from the database
+    user.refreshToken = null;
+    await user.save();
 
-        // Check if the decoded user ID matches the database user ID
-        if (user._id.toString() !== decoded._id) {
-          return res.status(403).json({ message: "Invalid or expired token" });
-        }
+    // Clear cookies from the client
+    res.clearCookie("accessToken", {
+      httpOnly: true, // Prevents JavaScript access (more secure)
+      secure: true, // Ensures cookies are sent over HTTPS only
+      sameSite: "strict", // Prevents CSRF attacks
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true, // Prevents JavaScript access (more secure)
+      secure: true, // Ensures cookies are sent over HTTPS only
+      sameSite: "strict", // Prevents CSRF attacks
+    });
 
-        // Generate a new access token
-        const newAccessToken = generateAccessToken({
-          username: decoded.username,
-          _id: decoded._id,
-        });
-
-        // Send the new access token as a cookie
-        return res
-          .cookie("accessToken", newAccessToken, {
-            httpOnly: true, // Prevents JavaScript access (more secure)
-            secure: true, // Ensures cookies are sent over HTTPS only
-            sameSite: "strict", // Prevents CSRF attacks
-            maxAge: 15 * 60 * 1000, // Cookie expiration (15 minutes)
-          })
-          .status(200)
-          .json({ message: "Access token refreshed successfully" });
-      }
-    );
+    return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error({ error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Failed to log out", error: error.message });
   }
 };
