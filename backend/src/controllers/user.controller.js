@@ -123,3 +123,55 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+const refreshAccessToken = async (req, res) => {
+  try {
+    // Get refresh token from cookies
+    const refreshTokenFromClient = req.cookies.refreshToken;
+    if (!refreshTokenFromClient) {
+      return res.status(401).json({ message: "Refresh token not found" });
+    }
+
+    // Check if the refresh token exists in the database
+    const user = await User.findOne({ refreshToken: refreshTokenFromClient });
+    if (!user) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    //verify refresh token
+    jwt.verify(
+      refreshTokenFromClient,
+      process.env.API_REFRESH_KEY,
+      (err, decoded) => {
+        if (err) {
+          return res.status(403).json({ message: "Invalid or expired token" });
+        }
+
+        // Check if the decoded user ID matches the database user ID
+        if (user._id.toString() !== decoded._id) {
+          return res.status(403).json({ message: "Invalid or expired token" });
+        }
+
+        // Generate a new access token
+        const newAccessToken = generateAccessToken({
+          username: decoded.username,
+          _id: decoded._id,
+        });
+
+        // Send the new access token as a cookie
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true, // Prevents JavaScript access (more secure)
+          secure: true, // Ensures cookies are sent over HTTPS only
+          sameSite: "strict", // Prevents CSRF attacks
+          maxAge: 40 * 1000, // Cookie expiration (15 minutes)
+        });
+
+        return res
+          .status(200)
+          .json({ message: "Access token refreshed successfully" });
+      }
+    );
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
