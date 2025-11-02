@@ -124,7 +124,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-const refreshAccessToken = async (req, res) => {
+export const refreshAccessToken = async (req, res) => {
   try {
     // Get refresh token from cookies
     const refreshTokenFromClient = req.cookies.refreshToken;
@@ -159,14 +159,13 @@ const refreshAccessToken = async (req, res) => {
         });
 
         // Send the new access token as a cookie
-        res.cookie("accessToken", newAccessToken, {
-          httpOnly: true, // Prevents JavaScript access (more secure)
-          secure: true, // Ensures cookies are sent over HTTPS only
-          sameSite: "strict", // Prevents CSRF attacks
-          maxAge: 40 * 1000, // Cookie expiration (15 minutes)
-        });
-
         return res
+          .cookie("accessToken", newAccessToken, {
+            httpOnly: true, // Prevents JavaScript access (more secure)
+            secure: true, // Ensures cookies are sent over HTTPS only
+            sameSite: "strict", // Prevents CSRF attacks
+            maxAge: 40 * 1000, // Cookie expiration (15 minutes)
+          })
           .status(200)
           .json({ message: "Access token refreshed successfully" });
       }
