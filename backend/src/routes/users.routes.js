@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/user.controller.js";
+import {
+  loginUser,
+  refreshAccessToken,
+  registerUser,
+} from "../controllers/user.controller.js";
 import { authenticateToken } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -11,5 +15,6 @@ router.route("/auth-test").post(authenticateToken, (req, res) => {
     .status(200)
     .json({ message: "user is authenticated", payload: req.user });
 });
+router.route("/refresh-token").post(refreshAccessToken);
 
 export default router;
