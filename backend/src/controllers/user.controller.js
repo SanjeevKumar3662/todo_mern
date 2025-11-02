@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const generateAccessToken = (jwtPayload) => {
   try {
     return jwt.sign(jwtPayload, process.env.API_ACCESS_KEY, {
-      expiresIn: "40s",
+      expiresIn: "15m",
     });
   } catch (error) {
     console.error("JWT signing failed:", error);

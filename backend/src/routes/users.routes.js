@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   loginUser,
+  logoutUser,
   refreshAccessToken,
   registerUser,
 } from "../controllers/user.controller.js";
@@ -16,5 +17,8 @@ router.route("/auth-test").post(authenticateToken, (req, res) => {
     .json({ message: "user is authenticated", payload: req.user });
 });
 router.route("/refresh-token").post(refreshAccessToken);
+
+//secured routes
+router.route("/logout").delete(authenticateToken, logoutUser);
 
 export default router;
