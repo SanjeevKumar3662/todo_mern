@@ -3,9 +3,22 @@ import { saltRounds } from "../constants.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-const generateAccessToken = (jwtPlayload) => {
+const generateAccessToken = (jwtPayload) => {
   try {
-    return jwt.sign(jwtPlayload, process.env.API_ACCESS_KEY);
+    return jwt.sign(jwtPayload, process.env.API_ACCESS_KEY, {
+      expiresIn: "40s",
+    });
+  } catch (error) {
+    console.error("JWT signing failed:", error);
+    throw error;
+  }
+};
+
+const generateRefreshToken = (jwtPayload) => {
+  try {
+    return jwt.sign(jwtPayload, process.env.API_REFRESH_KEY, {
+      expiresIn: "30d",
+    });
   } catch (error) {
     console.error("JWT signing failed:", error);
     throw error;
@@ -83,11 +96,27 @@ export const loginUser = async (req, res) => {
     }
 
     // console.log(user, isPasswordVerified);
-    const jwtPlayload = { username, mongo_id: user._id };
-    const accessToken = generateAccessToken(jwtPlayload); // no await, no res
+    const jwtPayload = { username, _id: user._id };
+    const accessToken = generateAccessToken(jwtPayload); // no await, no res
+    const refreshToken = generateRefreshToken(jwtPayload);
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
     return res
       .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true, // Prevents JavaScript access (more secure)
+        secure: true, // Ensures cookies are sent over HTTPS only
+        sameSite: "strict", // Prevents CSRF attacks
+        maxAge: 40 * 1000, // Cookie expiration (15 minutes) for now 40s
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true, // Prevents JavaScript access (more secure)
+        secure: true, // Ensures cookies are sent over HTTPS only
+        sameSite: "strict", // Prevents CSRF attacks
+        maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expiration (30 days)
+      })
       .json({ message: "loginIn successfull", accessToken });
   } catch (error) {
     console.log(error);
