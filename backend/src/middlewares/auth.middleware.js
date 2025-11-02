@@ -9,17 +9,16 @@ export const authenticateToken = (req, res, next) => {
     }
 
     jwt.verify(inputAccessToken, process.env.API_ACCESS_KEY, (err, user) => {
-      //here user is the payload from inputAccessToken
-
+      // here user is the payload from inputAccessToken
       if (err) {
-        throw new err();
+        return res.status(401).json("accessToken expired or wrong");
       }
 
-      req.user = user; // after auth, we can access this user form playload throw req.user
+      req.user = user; // after auth, we can access this user from payload via req.user
+      next();
     });
 
     // console.log(inputAccessToken);
-    next();
   } catch (error) {
     res.status(401).json("accessToken expired or wrong");
   }
