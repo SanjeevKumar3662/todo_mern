@@ -4,9 +4,11 @@ import cors from "cors";
 import connectDb from "./db/db.js";
 import todoRouter from "./routes/todo.routes.js";
 import userRouter from "./routes/users.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(cors());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
