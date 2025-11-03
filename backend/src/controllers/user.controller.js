@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { saltRounds } from "../constants.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const generateAccessToken = (jwtPayload) => {
   try {
@@ -168,7 +169,7 @@ export const loginUser = async (req, res) => {
         sameSite: "strict", // Prevents CSRF attacks
         maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expiration (30 days)
       })
-      .json({ message: "loginIn successfull", accessToken });
+      .json(new ApiResponse(200, {}, "User login successfull"));
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
