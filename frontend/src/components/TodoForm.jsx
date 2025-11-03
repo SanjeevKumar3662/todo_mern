@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Form = ({ todos, setTodos }) => {
+export const TodoForm = ({ todos, setTodos }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -80,5 +80,3 @@ const Form = ({ todos, setTodos }) => {
     </>
   );
 };
-
-export default Form;
