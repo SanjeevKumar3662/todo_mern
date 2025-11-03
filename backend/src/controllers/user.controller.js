@@ -134,7 +134,7 @@ export const loginUser = async (req, res) => {
         .status(400)
         .json("Both username and password are required for login");
     }
-
+    // console.log(username, password);
     //check if user exists
     const user = await User.findOne({ username }).select("+password");
     if (!user) {
@@ -169,7 +169,18 @@ export const loginUser = async (req, res) => {
         sameSite: "strict", // Prevents CSRF attacks
         maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expiration (30 days)
       })
-      .json(new ApiResponse(200, {}, "User login successfull"));
+      .json(
+        new ApiResponse(
+          200,
+          {
+            _id: user._id,
+            username: user.username,
+            fullname: user.fullname,
+            email: user.email,
+          },
+          "User login successfull"
+        )
+      );
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
@@ -215,5 +226,16 @@ export const logoutUser = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to log out", error: error.message });
+  }
+};
+
+export const getMe = (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(new ApiResponse(200, { user }, "User is logged in"));
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
   }
 };

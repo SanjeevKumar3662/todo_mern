@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getMe,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -21,5 +22,7 @@ router.route("/auth-test").post(authenticateToken, (req, res) => {
     .json({ message: "user is authenticated", payload: req.user });
 });
 router.route("/logout").delete(authenticateToken, logoutUser);
+
+router.route("/get-me").get(authenticateToken, getMe);
 
 export default router;
