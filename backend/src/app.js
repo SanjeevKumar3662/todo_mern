@@ -10,7 +10,7 @@ const app = express();
 app.use(
   cors(
     {
-      origin: ["https://todo-mern-app-pi.vercel.app/", "http://localhost:5173"],
+      origin: ["https://todo-mern-app-pi.vercel.app", "http://localhost:5173"],
     },
     {
       credentials: true,
