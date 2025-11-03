@@ -8,14 +8,10 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(
-  cors(
-    {
-      origin: ["https://todo-mern-app-pi.vercel.app", "http://localhost:5173"],
-    },
-    {
-      credentials: true,
-    }
-  )
+  cors({
+    origin: ["https://todo-mern-app-pi.vercel.app", "http://localhost:5173"],
+    credentials: true,
+  })
 );
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
