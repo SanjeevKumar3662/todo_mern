@@ -26,7 +26,7 @@ export const LoginForm = () => {
       if (response.status === 200) {
         console.log(`${user.username} is logged in`);
         console.log(response, user);
-        window.location.reload();
+        // window.location.reload();
       }
     } catch (error) {
       console.error("Error while loggin in user", error);
