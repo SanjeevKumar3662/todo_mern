@@ -83,6 +83,10 @@ button:active {
   background-color: rgb(226, 52, 43);
 }
 
+.auth-form {
+  margin-top: 3rem;
+}
+
 @media (max-width: 620px) {
   form,
   .main {

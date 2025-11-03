@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Todo from "./todo/Todo";
+import { apiClient } from "../utils/apiClient";
 
 const Todos = ({ todos, setTodos }) => {
   const API_URI = import.meta.env.VITE_API_URI;
@@ -16,23 +17,20 @@ const Todos = ({ todos, setTodos }) => {
 
   const onClickDelete = async (id) => {
     try {
-      const response = await fetch(`${API_URI}/todos/delete/${id}`, {
+      const response = await apiClient(`/todos/delete/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
 
-      // console.log(id);
       if (response.ok) {
-        //   setShowPopup(true); // show popup
-        console.log("item deleted");
-
-        //this will filter and remove the deleted todo for client side
-        setTodos(() => todos.filter((todo) => todo._id != id));
-        //   // hide popup after 2 seconds
-        //   setTimeout(() => setShowPopup(false), 2000);
+        console.log("Item deleted");
+        setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+      } else {
+        const data = await response.json();
+        console.error("Failed to delete:", data.message);
       }
     } catch (err) {
-      console.log(err);
+      console.error("Error deleting todo:", err.message);
     }
   };
 
