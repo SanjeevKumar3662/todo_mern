@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const { setUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const API_URI = import.meta.env.VITE_API_URI;
 
@@ -26,7 +32,10 @@ export const LoginForm = () => {
       if (response.status === 200) {
         console.log(`${user.username} is logged in`);
         console.log(response, user);
+
         // window.location.reload();
+        setUser(user);
+        navigate("/");
       }
     } catch (error) {
       console.error("Error while loggin in user", error);

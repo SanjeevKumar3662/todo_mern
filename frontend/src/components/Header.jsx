@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import useAuthStatus from "../utils/UseAuthStatus.js";
-
 import { apiClient } from "../utils/apiClient.js";
+
+import { AuthContext } from "./context/AuthContext.jsx";
+import { useContext } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useAuthStatus();
+  const { user, setUser } = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
-      await apiClient("/users/logout", { method: "DELETE" });
-      window.location.reload(); // or handle state update to redirect
+      const response = await apiClient("/users/logout", { method: "DELETE" });
+
+      if (response.ok) {
+        setUser(null);
+      }
+      // window.location.reload(); // or handle state update to redirect
     } catch (err) {
       console.error(err);
     }
@@ -26,7 +31,7 @@ const Header = () => {
           Home
         </button>
 
-        {!isLoggedIn ? (
+        {user === null ? (
           <>
             <button
               style={styles.registerButton}
