@@ -12,7 +12,7 @@ import { AuthContext } from "./components/context/AuthContext";
 function App() {
   // const [count, setCount] = useState(0)
   const [todos, setTodos] = useState([]);
-  const user = useContext(AuthContext).user;
+  const { user } = useContext(AuthContext);
   // console.log(user);
 
   return (
@@ -27,7 +27,7 @@ function App() {
                 <h1>
                   {user === null
                     ? "Login to Create/Delete a todo"
-                    : `${user.username} / ${user.fullname} is logged in`}
+                    : `${user.username} is logged in`}
                 </h1>
                 <TodoForm todos={todos} setTodos={setTodos} />
                 <Todos todos={todos} setTodos={setTodos} />

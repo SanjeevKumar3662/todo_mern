@@ -118,7 +118,7 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({
       // 201 code for created
-      user,
+      ...user,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
