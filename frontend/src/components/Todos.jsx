@@ -34,7 +34,7 @@ const Todos = ({ todos, setTodos }) => {
     }
   };
 
-  todos && console.log(todos);
+  // todos && console.log(todos);
   return (
     <>
       <h1>All Todos Here</h1>

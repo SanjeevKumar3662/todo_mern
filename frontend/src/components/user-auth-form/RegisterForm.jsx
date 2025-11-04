@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { apiClient } from "../../utils/apiClient";
+import { useNavigate } from "react-router-dom";
 
 export const ResgisterForm = () => {
   const [username, setUsername] = useState("");
@@ -6,13 +8,13 @@ export const ResgisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const API_URI = import.meta.env.VITE_API_URI;
+  const navigate = useNavigate();
 
   const handleClickRegisterUser = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_URI}/users/register`, {
+      const response = await apiClient(`/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,8 +28,11 @@ export const ResgisterForm = () => {
         credentials: "include",
       });
 
+      if (response.ok) {
+        navigate("/login");
+      }
       // const data = await response.json();
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error("error while registering user", error.message);
     }
