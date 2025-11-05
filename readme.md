@@ -29,6 +29,7 @@ Only registered and logged-in users can create or delete todos, while anyone can
 
 ## 📁 Project Structure
 
+<pre>
 📦 todo-app-api
 ┣ 📂 controllers
 ┃ ┣ 📜 user.controller.js
@@ -40,6 +41,7 @@ Only registered and logged-in users can create or delete todos, while anyone can
 ┃ ┗ 📜 todo.routes.js
 ┣ 📜 server.js
 ┗ 📜 package.json
+</pre>
 
 ---
 
